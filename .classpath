@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/thonon/git/ProjetRavageV2/lib/javax.json-1.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/thonon/git/ProjetRavageV2/lib/jbox2d-library.jar"/>
+	<classpathentry kind="lib" path="C:/Users/thonon/git/ProjetRavageV2/lib/jdom-2.0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/thonon/git/ProjetRavageV2/lib/jsfml.jar"/>
+	<classpathentry kind="lib" path="C:/Users/thonon/git/ProjetRavageV2/lib/slick.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

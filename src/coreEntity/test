@@ -1,0 +1,158 @@
+if(next != null)
+		{
+			elapseSearchClock = Time.add(elapseSearchClock, deltaTime);
+			if(elapseSearchClock.asSeconds() > 2f) // si bloqu√© plus de 2 secondes
+			{
+				elapseSearchClock = Time.ZERO;
+				// on saute une node de recherche
+				if(this.pathFinalPath.getLength() > 0 && indNavMesh < this.pathFinalPath.getLength())
+				{
+					int x = this.pathFinalPath.getX(indNavMesh);
+					int y = this.pathFinalPath.getY(indNavMesh);
+					//this.pathFinal.remove(0);
+					// on t√©l√©porte l'unit√©
+					this.body.setTransform(new Vec2(x,y), 0f);
+					next = null;
+				}
+				
+
+			}
+		}
+		
+		// -------------------------------------
+		// Code pour prendre le node suivant
+		// -------------------------------------
+		
+		if(next == null /*&& this.pathFinal != null && this.pathFinal.size() > 0 */ && this.pathFinalPath != null && 
+				this.pathFinalPath.getLength() > this.indNavMesh)
+		{
+			// on r√©cup√®re le node prochain
+			//next = this.pathFinal.get(0); // version classic
+			int nx = this.pathFinalPath.getX(indNavMesh);
+			int ny = this.pathFinalPath.getY(indNavMesh);
+			next = new Node((int) nx,(int) ny,false);
+			indNavMesh ++;
+			// on supprme le noduer premier
+			//this.pathFinal.remove(0); // version classic
+			// on lance le clock du resetSearchClock
+			elapseSearchClock = resetSearchClock.restart();
+			
+			// code Èmission rÈseau
+			NetHeader header = new NetHeader();
+			header.setTypeMessage(TYPE.MOVE);
+			NetMoveUnity move = new NetMoveUnity();
+			move.setId(this.getId());
+			move.setPosx(this.getPositionMeterX());
+			move.setPosy(this.getPositionMeterY());
+			move.setNextPosx(next.getX());
+			move.setNextPosy(next.getY());
+			header.setMessage(move);
+			// Èmission
+			try
+			{
+				NetManager.SendMessage(header);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		else
+			this.body.setLinearVelocity(new Vec2(0f,0f)); // il est arriv√© √† destination
+		
+		// -------------------------------------
+		// Code de d√©placement - mouvement
+		// -------------------------------------
+		
+		if(next != null) // il y a un node suivant
+		{
+			
+			Vec2 n;
+		
+			if(this.cptNavMesh < this.indNavMesh + 1)
+			{
+				// on est sur la derniËre node, on va reprendre le pixls prÈcis pour la destination de fin
+				n =  new Vec2(this.tfx / PhysicWorldManager.getRatioPixelMeter(),this.tfy / PhysicWorldManager.getRatioPixelMeter());
+				this.isArrived = true;
+				
+				// emission rÈseau
+				// code Èmission rÈseau
+				NetHeader header = new NetHeader();
+				header.setTypeMessage(TYPE.MOVE);
+				NetMoveUnity move = new NetMoveUnity();
+				move.setId(this.getId());
+				move.setPosx(this.getPositionMeterX());
+				move.setPosy(this.getPositionMeterY());
+				move.setNextPosx(n.x);
+				move.setNextPosy(n.y);
+				header.setMessage(move);
+				// Èmission
+				try
+				{
+					NetManager.SendMessage(header);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				// on calcul le vecteur velocity de diff√©rence
+				n = next.getPositionVec2();
+				this.isArrived = false;
+			}
+			
+			Vec2 diff = n.sub(this.body.getPosition());
+			if(diff.length() < 0.6f)
+				next = null;
+			else
+			{
+				diff.normalize();
+				this.body.setLinearVelocity(diff.mul(6f));
+			}	
+		}
+		
+		
+		// code permettant de reposionner l'unitÈ si elle est poussÈe
+		if(/*this.isArrived && */this.pathFinalPath != null && this.pathFinalPath.getLength() == this.indNavMesh)
+		{
+		
+			Vec2 n =  new Vec2(this.tfx / PhysicWorldManager.getRatioPixelMeter(),this.tfy / PhysicWorldManager.getRatioPixelMeter());
+			Vec2 diff = n.sub(this.body.getPosition());
+			if(diff.length() < 0.2f)
+			{
+				next = null;
+				
+				
+			}
+			else
+			{
+				diff.normalize();
+				this.body.setLinearVelocity(diff.mul(6f));
+				
+				// c'est la position finale, on envoie une dernire fois la position sur le rÈseau
+				// code Èmission rÈseau
+				NetHeader header = new NetHeader();
+				header.setTypeMessage(TYPE.MOVE);
+				NetMoveUnity move = new NetMoveUnity();
+				move.setId(this.getId());
+				move.setPosx(n.x);
+				move.setPosy(n.y);
+				move.setNextPosx(n.x);
+				move.setNextPosy(n.y);
+				header.setMessage(move);
+				// Èmission
+				try
+				{
+					NetManager.SendMessage(header);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}	
+		}
+		
