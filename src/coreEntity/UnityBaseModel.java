@@ -921,7 +921,7 @@ public class UnityBaseModel implements Externalizable
 				out.writeInt(r.left);
 				out.writeInt(r.top);
 				out.writeInt(r.width);
-				out.writeInt(r.height);
+				out.writeInt(r.height); 
 			}
 		}
 		else
