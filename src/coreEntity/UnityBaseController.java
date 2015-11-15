@@ -33,6 +33,8 @@ import coreNet.NetDataUnity;
 import coreNet.NetManager;
 import coreNet.NetSendThread;
 import corePhysic.PhysicWorldManager;
+import coreSounds.SoundsManager;
+import coreSounds.SoundsManager.TYPE_SOUNDS;
 import ravage.IBaseRavage;
 
 public class UnityBaseController implements IBaseRavage, ICallBackAStar,
@@ -431,6 +433,7 @@ public class UnityBaseController implements IBaseRavage, ICallBackAStar,
 
 		synchronized (lock) 
 		{
+			this.getModel().setKnocking(false); // on place à false la frappe pour indiquer au réseau que le personnage ne frappe plus
 			this.getModel().setIndicePaths(0);
 			this.getModel().setPaths(finalPath);
 			this.move();
@@ -485,6 +488,9 @@ public class UnityBaseController implements IBaseRavage, ICallBackAStar,
 			
 			
 			this.getModel().setEnergy((int) (this.getModel().getEnergy() - damage));
+			
+			// on joue le son
+			SoundsManager.PlaySounds(TYPE_SOUNDS.CRY_SOUNDS);
 			
 			// FIN ALGORITHME DE COMBAT
 			// on joue un peu de sang

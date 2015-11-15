@@ -38,6 +38,8 @@ import coreNet.NetHeader.TYPE;
 import coreNet.NetManager;
 import coreNet.NetStrike;
 import corePhysic.PhysicWorldManager;
+import coreSounds.SoundsManager;
+import coreSounds.SoundsManager.TYPE_SOUNDS;
 
 public class PiquierController extends UnityBaseController 
 {
@@ -55,12 +57,13 @@ public class PiquierController extends UnityBaseController
 		
 		// energy
 		this.getModel().setStreightStrike(15);
-		this.getModel().setEnergy(90);
-		this.getModel().setEnergyMax(90);
+		this.getModel().setEnergy(180);
+		this.getModel().setEnergyMax(180);
 		this.getModel().setArmor(3);
 		this.getModel().setPowerPenetration(4);
 		this.getModel().setDexterity(2);
 		this.getModel().setAgility(1);
+		this.getModel().setFrequencyStrike(1);
 	}
 
 	@Override
@@ -101,7 +104,7 @@ public class PiquierController extends UnityBaseController
 		// mise à jour du temps écoulé pour l'attaque
 		elapsedTimeAttack += deltaTime.asSeconds();
 		
-		if(elapsedTimeAttack > 1f)
+		if(elapsedTimeAttack > this.getModel().getFrequencyStrike())
 		{
 			
 			if(this.getModel().getIdEnemy() != -1 && m_isLastStep)
@@ -117,6 +120,8 @@ public class PiquierController extends UnityBaseController
 					{
 					
 						this.strike();
+						
+						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
 						
 						
 						NetDataUnity data = new NetDataUnity();			// creatin du netdataunity

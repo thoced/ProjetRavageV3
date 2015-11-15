@@ -39,6 +39,8 @@ import coreNet.NetHeader.TYPE;
 import coreNet.NetManager;
 import coreNet.NetStrike;
 import corePhysic.PhysicWorldManager;
+import coreSounds.SoundsManager;
+import coreSounds.SoundsManager.TYPE_SOUNDS;
 
 public class HacheurController extends UnityBaseController 
 {
@@ -56,12 +58,13 @@ public class HacheurController extends UnityBaseController
 		
 		// energy
 		this.getModel().setStreightStrike(25);
-		this.getModel().setEnergy(90);
-		this.getModel().setEnergyMax(90);
+		this.getModel().setEnergy(180);
+		this.getModel().setEnergyMax(180);
 		this.getModel().setArmor(2);
 		this.getModel().setPowerPenetration(2);
 		this.getModel().setDexterity(2);
 		this.getModel().setAgility(2);
+		this.getModel().setFrequencyStrike(2);
 	}
 
 	@Override
@@ -82,8 +85,8 @@ public class HacheurController extends UnityBaseController
 		this.getModel().setMIN_IND_FOR_WALK(0);
 		this.getModel().setMAX_IND_FOR_WALK(7);
 		this.getModel().setMIN_IND_FOR_STRIKE(8);
-		this.getModel().setMAX_IND_FOR_STRIKE(23);
-		this.getModel().setNB_FRAME_BY_SECOND(12);
+		this.getModel().setMAX_IND_FOR_STRIKE(25);
+		this.getModel().setNB_FRAME_BY_SECOND(17);
 		this.getModel().setHEIGHT_FRAME(32);
 		this.getModel().setWIDTH_FRAME(32);
 		
@@ -107,7 +110,7 @@ public class HacheurController extends UnityBaseController
 		// mise à jour du temps écoulé pour l'attaque
 		elapsedTimeAttack += deltaTime.asSeconds();
 		
-		if(elapsedTimeAttack > 1f)
+		if(elapsedTimeAttack > this.getModel().getFrequencyStrike())
 		{
 			
 			if(this.getModel().getIdEnemy() != -1 && m_isLastStep)
@@ -123,6 +126,8 @@ public class HacheurController extends UnityBaseController
 					{
 					
 						this.strike();
+						
+						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
 						
 						// ---------------------------------------------
 						// ---------------------------------------------

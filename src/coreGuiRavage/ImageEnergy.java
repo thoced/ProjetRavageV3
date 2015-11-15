@@ -47,10 +47,10 @@ public class ImageEnergy extends Image
 		super.update(deltaTime);
 		// mise à jour de l'énergie
 		// modification des couleurs de l'energie du vert au rouge
-		int g = (255 / m_unity.getModel().getEnergyMax()) *  m_unity.getModel().getEnergy();
-		int r = 255 - g;
+		float g = (255 / m_unity.getModel().getEnergyMax()) *  m_unity.getModel().getEnergy();
+		float r = 255 - g;
 		// placementd de la couleur
-		((ImageEnergyView)this.m_view).m_shape.setFillColor(new Color(r,g,0));
+		((ImageEnergyView)this.m_view).m_shape.setFillColor(new Color((int)r,(int)g,0));
 		// positionnement de la grandeur de l'energie
 		((ImageEnergyView)this.m_view).m_shape.setSize(new Vector2f((24f / m_unity.getModel().getEnergyMax()) * m_unity.getModel().getEnergy(),2f));	
 		

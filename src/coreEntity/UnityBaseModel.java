@@ -88,6 +88,8 @@ public class UnityBaseModel implements Externalizable
 	protected int dexterity;
 	// l'unité frappe t il avec un coup critique ?
 	protected boolean isCriticalStrike = false;
+	// fréquence de frappe
+	protected float frequencyStrike = 1f;
 	
 	
 	/////////////////////////////////
@@ -165,6 +167,7 @@ public class UnityBaseModel implements Externalizable
 		clone.setDexterity(this.getDexterity());
 		clone.setAgility(this.getAgility());
 		clone.setCriticalStrike(this.isCriticalStrike());
+		clone.setFrequencyStrike(this.getFrequencyStrike());
 		clone.setOneContact(this.isOneContact());
 		clone.setMoveToEnemy(this.isMoveToEnemy());
 		clone.setNB_FRAME_BY_SECOND(this.NB_FRAME_BY_SECOND);
@@ -218,6 +221,16 @@ public class UnityBaseModel implements Externalizable
 	}
 	
 	
+
+	public float getFrequencyStrike() {
+		return frequencyStrike;
+	}
+
+
+	public void setFrequencyStrike(float frequencyStrike) {
+		this.frequencyStrike = frequencyStrike;
+	}
+
 
 	public boolean isCriticalStrike() {
 		return isCriticalStrike;
@@ -733,6 +746,8 @@ public class UnityBaseModel implements Externalizable
 		this.agility = arg0.readInt();
 		// coup critique ?
 		this.isCriticalStrike = arg0.readBoolean();
+		// frequence de frappe entre deux frappes
+		this.frequencyStrike = arg0.readFloat();
 		
 		
 		// animation
@@ -891,6 +906,8 @@ public class UnityBaseModel implements Externalizable
 		out.writeInt(this.agility);
 		// is critical strike ?
 		out.writeBoolean(this.isCriticalStrike);
+		// frequence entre deux frappes
+		out.writeFloat(this.frequencyStrike);
 		// animation
 		//out.writeObject(this.animations);
 		

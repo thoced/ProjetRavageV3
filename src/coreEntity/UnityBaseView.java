@@ -80,16 +80,23 @@ public  class UnityBaseView implements Drawable
 	private void strikeAnimation()
 	{
 		// on calcul l'animation
-		int ind = (int) (model.NB_FRAME_BY_SECOND * this.elapsedAnimationTime) + model.MIN_IND_FOR_STRIKE; // 5 étant l'offset
-		if(ind > model.MAX_IND_FOR_STRIKE)
+		try
 		{
-			ind = model.MIN_IND_FOR_STRIKE;
-			this.playAnimation(TYPE_ANIMATION.NON);
+			int ind = (int) (model.NB_FRAME_BY_SECOND * this.elapsedAnimationTime) + model.MIN_IND_FOR_STRIKE; // 5 étant l'offset
+			if(ind > model.MAX_IND_FOR_STRIKE)
+			{
+				ind = model.MIN_IND_FOR_STRIKE;
+				this.playAnimation(TYPE_ANIMATION.NON);
+				
+			}
+			System.out.println("indice: "+ ind);
 			
+			this.sprite.setTextureRect(this.getController().getModel().getAnimations().getInd(ind));
 		}
-		System.out.println("indice: "+ ind);
-		
-		this.sprite.setTextureRect(this.getController().getModel().getAnimations().getInd(ind));
+		catch(ArrayIndexOutOfBoundsException aioe)
+		{
+			System.out.println("ERROR : ArrayIndexOutOfBoundsException  StrikeAnimation UnityBaseView " + aioe.getMessage());
+		}
 		
 	}
 	

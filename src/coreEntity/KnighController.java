@@ -39,6 +39,8 @@ import coreNet.NetHeader.TYPE;
 import coreNet.NetManager;
 import coreNet.NetStrike;
 import corePhysic.PhysicWorldManager;
+import coreSounds.SoundsManager;
+import coreSounds.SoundsManager.TYPE_SOUNDS;
 
 public class KnighController extends UnityBaseController 
 {
@@ -56,12 +58,13 @@ public class KnighController extends UnityBaseController
 		
 		// energy
 		this.getModel().setStreightStrike(15);
-		this.getModel().setEnergy(70);
-		this.getModel().setEnergyMax(70);
+		this.getModel().setEnergy(180);
+		this.getModel().setEnergyMax(180);
 		this.getModel().setArmor(1);
 		this.getModel().setPowerPenetration(3);
 		this.getModel().setDexterity(3);
 		this.getModel().setAgility(3);
+		this.getModel().setFrequencyStrike(1);
 	}
 
 	@Override
@@ -101,7 +104,7 @@ public class KnighController extends UnityBaseController
 		// mise à jour du temps écoulé pour l'attaque
 		elapsedTimeAttack += deltaTime.asSeconds();
 		
-		if(elapsedTimeAttack > 1f)
+		if(elapsedTimeAttack > this.getModel().getFrequencyStrike())
 		{
 			
 			if(this.getModel().getIdEnemy() != -1 && m_isLastStep)
@@ -118,6 +121,7 @@ public class KnighController extends UnityBaseController
 					
 						//
 						this.strike();
+						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
 						// ---------------------------------------------
 						// ---------------------------------------------
 						// calcul du coup critique ?

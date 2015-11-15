@@ -63,7 +63,8 @@ import coreMessageManager.MessageManager;
 import coreMessageManager.RegistrationObject;
 import coreNet.NetManager;
 import corePhysic.PhysicWorldManager;
-import coreSounds.SoundsEngine;
+import coreSounds.SoundsManager;
+
 
 public class FrameWork
 {
@@ -85,6 +86,7 @@ public class FrameWork
 	private MessageManager messageManager;
 	private FogManager fogManager;
 	private ForegroundEffectManager foregroundEffectManager;
+	private SoundsManager soundsManager;
 	// Clocks
 	private Clock frameClock;
 	// fps
@@ -168,6 +170,8 @@ public class FrameWork
 		fogManager.init();
 		foregroundEffectManager = new ForegroundEffectManager(new Vector2i(currentLevel.getModel().getM_sizeX(),currentLevel.getModel().getM_sizeY()),entityManager);
 		foregroundEffectManager.init();
+		soundsManager = new SoundsManager();
+		soundsManager.init();
 	
 		// création des guis tests
 		PanelInfoGold infoGold = new PanelInfoGold(0.5f,(1f / window.getSize().y) * 24f,new Vector2f(256f,48f));
@@ -202,9 +206,7 @@ public class FrameWork
 		renderGui = new RenderTexture();
 		renderGui.create(window.getSize().x, window.getSize().y);
 		spriteGui = new Sprite(renderGui.getTexture());
-		
-		SoundsEngine sm = new SoundsEngine();
-		
+	
 		
 		
 	}
@@ -332,6 +334,9 @@ public class FrameWork
 		// fermeture de la connection UDP et du theadd
 		if(netManager != null)
 			netManager.close();
+		
+		if(soundsManager != null)
+			soundsManager.closeThread();
 		// fermeture de la fenetre
 		window.close();
 	}

@@ -38,6 +38,8 @@ import coreNet.NetHeader.TYPE;
 import coreNet.NetManager;
 import coreNet.NetStrike;
 import corePhysic.PhysicWorldManager;
+import coreSounds.SoundsManager;
+import coreSounds.SoundsManager.TYPE_SOUNDS;
 
 public class DuellisteController extends UnityBaseController 
 {
@@ -55,12 +57,13 @@ public class DuellisteController extends UnityBaseController
 		
 		// energy
 		this.getModel().setStreightStrike(10);
-		this.getModel().setEnergy(90);
-		this.getModel().setEnergyMax(90);
+		this.getModel().setEnergy(140);
+		this.getModel().setEnergyMax(140);
 		this.getModel().setArmor(3);
 		this.getModel().setPowerPenetration(1);
 		this.getModel().setDexterity(3);
 		this.getModel().setAgility(1);
+		this.getModel().setFrequencyStrike(0.5f);
 	}
 
 	@Override
@@ -82,9 +85,9 @@ public class DuellisteController extends UnityBaseController
 		this.getModel().setMAX_IND_FOR_WALK(9);
 		this.getModel().setMIN_IND_FOR_STRIKE(10);
 		this.getModel().setMAX_IND_FOR_STRIKE(22);
-		this.getModel().setNB_FRAME_BY_SECOND(20);
-		this.getModel().setHEIGHT_FRAME(80);
-		this.getModel().setWIDTH_FRAME(80);
+		this.getModel().setNB_FRAME_BY_SECOND(24);
+		this.getModel().setHEIGHT_FRAME(32);
+		this.getModel().setWIDTH_FRAME(32);
 		
 		
 		
@@ -106,7 +109,7 @@ public class DuellisteController extends UnityBaseController
 		// mise à jour du temps écoulé pour l'attaque
 		elapsedTimeAttack += deltaTime.asSeconds();
 		
-		if(elapsedTimeAttack > 1f)
+		if(elapsedTimeAttack > this.getModel().getFrequencyStrike())
 		{
 			
 			if(this.getModel().getIdEnemy() != -1 && m_isLastStep)
@@ -123,6 +126,7 @@ public class DuellisteController extends UnityBaseController
 					
 						this.strike();
 						
+						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
 						
 						NetDataUnity data = new NetDataUnity();			// creatin du netdataunity
 						data.setTypeMessage(NetBase.TYPE.UPDATE);		// on spécifie que c'est une update

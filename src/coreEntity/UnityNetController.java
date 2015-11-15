@@ -10,6 +10,8 @@ import coreEntityManager.EntityManager.CAMP;
 import coreNet.NetBase;
 import coreNet.NetDataUnity;
 import coreNet.NetSendThread;
+import coreSounds.SoundsManager;
+import coreSounds.SoundsManager.TYPE_SOUNDS;
 
 public class UnityNetController extends UnityBaseController
 {
@@ -35,6 +37,8 @@ public class UnityNetController extends UnityBaseController
 			this.strike();
 			// on empèche de frapper une seconde fois
 			this.getModel().setKnocking(false);
+			
+			SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
 			// on frappe réelleemnt l'enemy
 		/*	UnityBaseController u = EntityManager.getVectorUnity().get(this.getModel().getIdEnemy());
 			System.out.println("Enemy : " + u);
@@ -43,6 +47,8 @@ public class UnityNetController extends UnityBaseController
 			
 			
 		}
+		
+		
 		
 		if(this.getModel().isKilled)
 		{

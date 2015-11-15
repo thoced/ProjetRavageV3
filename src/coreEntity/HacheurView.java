@@ -28,7 +28,7 @@ public class HacheurView extends UnityBaseView
 	@Override
 	public void prepareAnimations(Animations animations)
 	{
-		animations.makeAnimation(23);
+		animations.makeAnimation(26);
 		
 		for(int i=0;i<animations.getAnimations().length;i++)
 		{
