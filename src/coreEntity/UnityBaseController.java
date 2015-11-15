@@ -489,14 +489,12 @@ public class UnityBaseController implements IBaseRavage, ICallBackAStar,
 			
 			this.getModel().setEnergy((int) (this.getModel().getEnergy() - damage));
 			
-			// on joue le son
-			SoundsManager.PlaySounds(TYPE_SOUNDS.CRY_SOUNDS);
-			
+					
 			// FIN ALGORITHME DE COMBAT
 			// on joue un peu de sang
 			BloodManager.addBlood(this.getModel().getPosition());
 			// si l'energie est égale à 0 ou inférieur, on meurt
-			if (this.getModel().getEnergy() <= 0)
+			if (this.getModel().getEnergy() <= 0) // c'est la mort
 			{
 				// ensutie il faut le code réseau
 				this.getModel().setKilled(true);
@@ -518,6 +516,8 @@ public class UnityBaseController implements IBaseRavage, ICallBackAStar,
 				
 				// ensutie il faut jouer la mort en view, on place un cadavre
 				BloodManager.addUnityKilled(this.getModel().getPosition(), this.getModel().getMyCamp());
+				// on joue le son d'un cri de mort
+				SoundsManager.PlaySounds(TYPE_SOUNDS.CRY_SOUNDS);
 				
 			}
 		}

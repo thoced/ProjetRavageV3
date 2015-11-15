@@ -39,6 +39,7 @@ import UI.PanelInfoUnite;
 import coreAI.AstarManager;
 import coreAI.Node;
 import coreDrawable.FogManager.IFogVector;
+import coreEntity.ArcherController;
 import coreEntity.DuellisteController;
 import coreEntity.HacheurController;
 import coreEntity.KnighController;
@@ -533,6 +534,39 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 		hacheur.prepareModelToNet();
 		try {
 			create.setModel(hacheur.getModel().clone());
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		create.setTypeMessage(TYPE.CREATE);
+		
+		System.out.println("envoie du header : " );
+		NetSendThread.push(create);
+		
+		// gamePlayModel
+		gamePlayModel.setM_nbUnity(getVectorUnity().size());
+		
+	}
+	
+
+	public static void createArcher()
+	{
+		ArcherController archer = new ArcherController();
+		archer.getModel().setPosition(new Vec2(NetManager.getPosxStartFlag(),NetManager.getPosyStartFlag()));
+		archer.getModel().setSpeed(6f);
+		archer.getModel().setId((EntityManager.getNewIdUnity()));
+		archer.getModel().setMyCamp(EntityManager.getCampSelected());
+		archer.getModel().setIdType(TYPEUNITY.ARCHER);
+		archer.getModel().setPlayer(true); // c'est un model controllé par le joueur
+		archer.getModel().initModel(archer);
+		archer.init();
+		EntityManager.getVectorUnity().put(archer.getModel().getId(), archer);
+		// emission sur le réseau de l'unité
+		NetDataUnity create = new NetDataUnity();
+		
+		archer.prepareModelToNet();
+		try {
+			create.setModel(archer.getModel().clone());
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1113,7 +1147,7 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 		
 		private int m_nbUnity = 0;
 		
-		private int m_goldCoin = 250;
+		private int m_goldCoin = 2500;
 		
 		private float elapsedTimeForGold = 0f;
 		
@@ -1216,6 +1250,7 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 		// TODO Auto-generated method stub
 		return this.vectorUnity.values();
 	}
+
 
 	
 

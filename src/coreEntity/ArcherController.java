@@ -2,7 +2,6 @@ package coreEntity;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.Shape;
@@ -42,29 +41,29 @@ import corePhysic.PhysicWorldManager;
 import coreSounds.SoundsManager;
 import coreSounds.SoundsManager.TYPE_SOUNDS;
 
-public class KnighController extends UnityBaseController 
+public class ArcherController extends UnityBaseController 
 {
 	private float elapsedTimeAttack = 0f;
 	
 
 	
 	
-	public KnighController() {
+	public ArcherController() {
 		super();
 		// instance de la vue et du model
 		
-		this.setModel(new KnightModel(this));
-		this.setView(new KnightView(this.getModel(),this));
+		this.setModel(new ArcherModel(this));
+		this.setView(new ArcherView(this.getModel(),this));
 		
 		// energy
 		this.getModel().setStreightStrike(15);
-		this.getModel().setEnergy(180);
-		this.getModel().setEnergyMax(180);
+		this.getModel().setEnergy(140);
+		this.getModel().setEnergyMax(140);
 		this.getModel().setArmor(1);
-		this.getModel().setPowerPenetration(3);
+		this.getModel().setPowerPenetration(2);
 		this.getModel().setDexterity(3);
-		this.getModel().setAgility(3);
-		this.getModel().setFrequencyStrike(1);
+		this.getModel().setAgility(2);
+		this.getModel().setFrequencyStrike(0.66f);
 	}
 
 	@Override
@@ -72,9 +71,9 @@ public class KnighController extends UnityBaseController
 	{
 		// initialisation de la vue avec un sprite
 		if(this.getModel().getMyCamp() == CAMP.YELLOW)
-			this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_KNIGHT_YELLOW.png"));
+			this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_ARCHER_YELLOW.png"));
 		if(this.getModel().getMyCamp() == CAMP.BLUE)
-			this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_KNIGHT_BLUE.png"));
+			this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_ARCHER_BLUE.png"));
 
 		// initialisa la vue avec l'origine du sprite
 		this.getView().getSprite().setOrigin(new Vector2f(16f,16f));
@@ -83,10 +82,16 @@ public class KnighController extends UnityBaseController
 		
 		// on parametre la vue pour préciser les indices des frames
 		this.getModel().setMIN_IND_FOR_WALK(0);
-		this.getModel().setMAX_IND_FOR_WALK(7);
-		this.getModel().setMIN_IND_FOR_STRIKE(8);
-		this.getModel().setMAX_IND_FOR_STRIKE(22);
-		this.getModel().setNB_FRAME_BY_SECOND(20);
+		this.getModel().setMAX_IND_FOR_WALK(5);
+		this.getModel().setMIN_IND_FOR_STRIKE(17);
+		this.getModel().setMAX_IND_FOR_STRIKE(31);
+		this.getModel().setNB_FRAME_BY_SECOND(15);
+		this.getModel().setHEIGHT_FRAME(32);
+		this.getModel().setWIDTH_FRAME(32);
+		
+		
+		
+		
 		
 		// ajout au event manager
 		EventManager.addCallBack(this);
@@ -119,25 +124,14 @@ public class KnighController extends UnityBaseController
 					if(this.m_dirEnemy.length() < 2f)
 					{
 					
-						//
 						this.strike();
-						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
-						// ---------------------------------------------
-						// ---------------------------------------------
-						// calcul du coup critique ?
-						Random rand = new Random();
-						int resultCritique = rand.nextInt(100);
-						if(resultCritique <= 5)  // 5 étant le pourcentage de chance pour le chevalier
-							this.getModel().setCriticalStrike(true);
-						else
-							this.getModel().setCriticalStrike(false);
-						// ---------------------------------------------
-						// ---------------------------------------------
 						
+						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
 						
 						NetDataUnity data = new NetDataUnity();			// creatin du netdataunity
 						data.setTypeMessage(NetBase.TYPE.UPDATE);		// on spécifie que c'est une update
 						this.getModel().setKnocking(true);				// on spécifie au modèle que nous sommes en train de frapper
+						this.getModel().setStreightStrike(10);			// on spécifie la force de frappe
 						this.prepareModelToNet();						// préparation du model pour l'envoi sur le réseau
 						try
 						{

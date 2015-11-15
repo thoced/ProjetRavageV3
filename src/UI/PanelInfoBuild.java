@@ -34,12 +34,13 @@ import coreMessageManager.MessageRavage;
 
 public class PanelInfoBuild extends Panel implements IButtonListener, IProgressBarListener
 {
-	private enum TYPE_ACTION_POLL {CREATE_PIQUIER,CREATE_KNIGHT,CREATE_DUELLISTE,CREATE_HACHEUR};
+	private enum TYPE_ACTION_POLL {CREATE_PIQUIER,CREATE_KNIGHT,CREATE_DUELLISTE,CREATE_HACHEUR,CREATE_ARCHER};
 	// file d'attnte de construction
 	private ArrayBlockingQueue<TYPE_ACTION_POLL> m_pollCreatePiquier; 
 	private ArrayBlockingQueue<TYPE_ACTION_POLL> m_pollCreateKnight; 
 	private ArrayBlockingQueue<TYPE_ACTION_POLL> m_pollCreateDuelliste;
 	private ArrayBlockingQueue<TYPE_ACTION_POLL> m_pollCreateHacheur; 
+	private ArrayBlockingQueue<TYPE_ACTION_POLL> m_pollCreateArcher; 
 	// bar de progression pour les piquier
 	private ProgressBar m_barPiquier;
 	private Label       m_labelFilePiquier;
@@ -52,6 +53,9 @@ public class PanelInfoBuild extends Panel implements IButtonListener, IProgressB
 	// progression Hacheur
 	private ProgressBar m_barHacheur;
 	private Label		m_labelFileHacheur;
+	// progression Archer
+	private ProgressBar m_barArcher;
+	private Label		m_labelFileArcher;
 	
 
 	public PanelInfoBuild(float x, float y, Vector2f size)
@@ -64,6 +68,7 @@ public class PanelInfoBuild extends Panel implements IButtonListener, IProgressB
 		m_pollCreateKnight = new ArrayBlockingQueue<TYPE_ACTION_POLL>(256);
 		m_pollCreateDuelliste = new ArrayBlockingQueue<TYPE_ACTION_POLL>(256);
 		m_pollCreateHacheur =  new ArrayBlockingQueue<TYPE_ACTION_POLL>(256);
+		m_pollCreateArcher =  new ArrayBlockingQueue<TYPE_ACTION_POLL>(256);
 		// création des boutons
 		// Bouton piquier
 		Button button01 = new Button(new Vector2f(16f,10f),new Vector2f(64f,64f));
@@ -142,6 +147,26 @@ public class PanelInfoBuild extends Panel implements IButtonListener, IProgressB
 		m_labelFileHacheur.setColor(new Color(128,128,128,256));
 		m_labelFileHacheur.setText("");
 		this.addWidget(m_labelFileHacheur);
+		
+		// création des boutons Hacheur
+		
+		Button buttonArcher = new Button(new Vector2f(16f,306f),new Vector2f(64f,64f));
+		if(EntityManager.campSelected == CAMP.BLUE)
+			buttonArcher.setTexture(TexturesManager.GetTextureByName("ButtonArcherBlue.png"));
+		else
+			buttonArcher.setTexture(TexturesManager.GetTextureByName("ButtonArcherYellow.png"));
+			// ajout du widget au panel
+		this.addWidget(buttonArcher);
+		buttonArcher.setAction("CREATE_ARCHER"); // creation de l'action
+		buttonArcher.addListener(this); // ajout du listener
+		// creation du progress bar piquier
+		m_barArcher = new ProgressBar(new Vector2f(16f,372f),new Vector2f(64f,4f),1f,this);
+		this.addWidget(m_barArcher);
+		// création du label de file d'attente pour le piquier
+		m_labelFileArcher = new Label(new Vector2f(20f,308f));
+		m_labelFileArcher.setColor(new Color(128,128,128,256));
+		m_labelFileArcher.setText("");
+		this.addWidget(m_labelFileArcher);
 				
 	}
 	
@@ -208,6 +233,16 @@ public class PanelInfoBuild extends Panel implements IButtonListener, IProgressB
 					m_labelFileHacheur.setText(String.valueOf(m_pollCreateHacheur.size()));
 				else
 					m_labelFileHacheur.setText("");
+				
+				break;
+				
+			case "CREATE_ARCHER":
+				m_pollCreateArcher.add(TYPE_ACTION_POLL.CREATE_ARCHER);
+				pollProgress(m_pollCreateArcher,m_barArcher); // poll
+				if(m_pollCreateArcher.size() > 0) 
+					m_labelFileArcher.setText(String.valueOf(m_pollCreateArcher.size()));
+				else
+					m_labelFileArcher.setText("");
 				
 				break;
 			
@@ -314,6 +349,31 @@ public class PanelInfoBuild extends Panel implements IButtonListener, IProgressB
 				}
 				else
 					m_labelFileHacheur.setText("");
+			}
+		}
+		
+		if(owner == m_barArcher)
+		{
+			if(EntityManager.getGamePlayModel().pay(10)) // on pay
+			{
+					// création du knight
+					EntityManager.createArcher();
+				
+				// on regarde si il existe d'autres actions dans la file d'attente
+				if((m_pollCreateArcher.poll()) != null)
+				{
+					// déclenchement du progress
+					m_barArcher.startProgressBar();
+					
+					
+					// mise à jour du label de construction
+					if(m_pollCreateArcher.size() > 0) 
+						m_labelFileArcher.setText(String.valueOf(m_pollCreateArcher.size()));
+					else
+						m_labelFileArcher.setText("");
+				}
+				else
+					m_labelFileArcher.setText("");
 			}
 		}
 	}

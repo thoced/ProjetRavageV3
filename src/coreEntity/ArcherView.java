@@ -5,11 +5,11 @@ import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderStates;
 import org.jsfml.graphics.RenderTarget;
 
-public class KnightView extends UnityBaseView
+public class ArcherView extends UnityBaseView
 {
 	
 	
-	public KnightView(UnityBaseModel model, UnityBaseController controller) {
+	public ArcherView(UnityBaseModel model, UnityBaseController controller) {
 		super(model, controller);
 	
 	}
@@ -28,7 +28,7 @@ public class KnightView extends UnityBaseView
 	@Override
 	public void prepareAnimations(Animations animations)
 	{
-		animations.makeAnimation(23);
+		animations.makeAnimation(32);
 		
 		for(int i=0;i<animations.getAnimations().length;i++)
 		{

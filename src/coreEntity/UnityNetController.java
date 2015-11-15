@@ -58,6 +58,8 @@ public class UnityNetController extends UnityBaseController
 			
 			// on ajoute un cadavre
 			BloodManager.addUnityKilled(this.getModel().getPosition(), this.getModel().getMyCamp());
+			// l'unité ennemie meurt, on joue le son aussi
+			SoundsManager.PlaySounds(TYPE_SOUNDS.CRY_SOUNDS);
 		}
 		
 		
@@ -122,6 +124,11 @@ public class UnityNetController extends UnityBaseController
 			{
 				this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_HACHEUR_YELLOW.png"));
 			}
+			
+			if(this.getModel().getIdType() == TYPEUNITY.ARCHER)
+			{
+				this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_ARCHER_YELLOW.png"));
+			}
 		}
 		
 		if(this.getModel().getMyCamp() == CAMP.BLUE)
@@ -144,6 +151,11 @@ public class UnityNetController extends UnityBaseController
 			if(this.getModel().getIdType() == TYPEUNITY.BUCHE)
 			{
 				this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_HACHEUR_BLUE.png"));
+			}
+			
+			if(this.getModel().getIdType() == TYPEUNITY.ARCHER)
+			{
+				this.getView().setSprite(TexturesManager.GetSpriteByName("ANIM_ARCHER_BLUE.png"));
 			}
 		}
 		
