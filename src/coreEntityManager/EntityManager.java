@@ -12,6 +12,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Rot;
@@ -105,7 +107,7 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 	private Clock clock;
 	private Time delta;
 	// listdes unités selectionés
-	private List<UnityBaseController> listUnitySelected;
+	private static List<UnityBaseController> listUnitySelected;
 	
 	// instance du ChooseAngleFormationDrawable
 	private ChooseAngleFormationDrawable arrow;
@@ -139,7 +141,7 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 		vectorUnity = new ConcurrentHashMap<Integer,UnityBaseController>();
 		vectorUnityKilled = new ArrayList<UnityBaseController>();
 		// liste des unités selectionnés
-		listUnitySelected = new ArrayList<UnityBaseController>();
+		listUnitySelected = new CopyOnWriteArrayList<UnityBaseController>();
 		// instance vectorunitynet
 		//vectorUnityNet = new ArrayList<UnityNet>();
 		vectorUnityNet = new ConcurrentHashMap<Integer,UnityNetController>();
@@ -311,9 +313,21 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 	public static void setVectorUnityNet(List<UnityNet> vectorUnityNet) {
 		EntityManager.vectorUnityNet = vectorUnityNet;
 	}*/
+	
+	
 
 	public static List<UnityBaseController> getVectorUnityKilled() {
 		return vectorUnityKilled;
+	}
+
+
+	public static List<UnityBaseController> getListUnitySelected() {
+		return listUnitySelected;
+	}
+
+	public static void setListUnitySelected(
+			List<UnityBaseController> listUnitySelected) {
+		EntityManager.listUnitySelected = listUnitySelected;
 	}
 
 	public static void setVectorUnityKilled(

@@ -911,8 +911,9 @@ public class UnityBaseModel implements Externalizable
 		// animation
 		//out.writeObject(this.animations);
 		
-		if(this.animations != null)
+		if(this.animations != null &&this.animations.getAnimations() != null )
 		{
+			
 			int size = this.animations.getAnimations().length;
 			out.writeInt(size);
 			for(int j=0;j<size;j++)

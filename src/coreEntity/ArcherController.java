@@ -121,32 +121,58 @@ public class ArcherController extends UnityBaseController
 				{
 					this.m_dirEnemy = m_enemy.getModel().getPosition().sub(this.getModel().getPosition());
 					
-					if(this.m_dirEnemy.length() < 2f)
-					{
 					
-						this.strike();
-						
-						SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
-						
-						NetDataUnity data = new NetDataUnity();			// creatin du netdataunity
-						data.setTypeMessage(NetBase.TYPE.UPDATE);		// on spécifie que c'est une update
-						this.getModel().setKnocking(true);				// on spécifie au modèle que nous sommes en train de frapper
-						this.getModel().setStreightStrike(10);			// on spécifie la force de frappe
-						this.prepareModelToNet();						// préparation du model pour l'envoi sur le réseau
-						try
-						{
-							data.setModel(this.getModel().clone());
-						} catch (CloneNotSupportedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}					// placement du model dans le netdataunity
-						NetSendThread.push(data);						// envoi sur le réseau
-					}
-					else
+					// attaque à distanc,tir de l'archer
+					ArrowArcher arrow = new ArrowArcher();
+					arrow.getModel().setPosition(this.getModel().getPosition());
+					arrow.getModel().setSpeed(24f);
+					arrow.getModel().setId(EntityManager.getNewIdUnity());
+					arrow.getModel().setMyCamp(EntityManager.getCampSelected());
+					arrow.getModel().setIdType(TYPEUNITY.ARCHER);
+					arrow.getModel().setPlayer(true); // c'est un model controllé par le joueur
+					arrow.getModel().initModel(arrow);
+					arrow.setDirArrow(this.m_dirEnemy);
+					arrow.setTimeToDie(1f);
+					arrow.setDiffStartToTarget(this.m_dirEnemy.length());
+					arrow.setEnemy(m_enemy);
+					arrow.init();
+					
+					EntityManager.getVectorUnity().put(arrow.getModel().getId(), arrow);
+					
+					// attaque à distance, tir
+					if(this.m_dirEnemy.length() < 15f)
 					{
-						// déplacement vers l'enemy
-						this.moveToEnemy();
+						
+						// attaque au corps à corps
+						if(this.m_dirEnemy.length() < 2f)
+						{
+						
+							this.strike();
+							
+							SoundsManager.PlaySounds(TYPE_SOUNDS.STRIKE_SOUNDS);
+							
+							NetDataUnity data = new NetDataUnity();			// creatin du netdataunity
+							data.setTypeMessage(NetBase.TYPE.UPDATE);		// on spécifie que c'est une update
+							this.getModel().setKnocking(true);				// on spécifie au modèle que nous sommes en train de frapper
+							this.getModel().setStreightStrike(10);			// on spécifie la force de frappe
+							this.prepareModelToNet();						// préparation du model pour l'envoi sur le réseau
+							try
+							{
+								data.setModel(this.getModel().clone());
+							} catch (CloneNotSupportedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}					// placement du model dans le netdataunity
+							NetSendThread.push(data);						// envoi sur le réseau
+						}
+						else
+						{
+							// tir
+							
+						}
 					}
+					
+					
 					
 				}
 				{

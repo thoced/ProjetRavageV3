@@ -513,6 +513,8 @@ public class UnityBaseController implements IBaseRavage, ICallBackAStar,
 				this.destroy(); // suppresion de l'objet dans le monde physique
 				// suppresion de l'unité
 				EntityManager.getVectorUnity().remove(this.getModel().getId());
+				// Suppresion de l'unité dans la liste des objets sélectionnés
+				EntityManager.getListUnitySelected().remove(this);
 				
 				// ensutie il faut jouer la mort en view, on place un cadavre
 				BloodManager.addUnityKilled(this.getModel().getPosition(), this.getModel().getMyCamp());
