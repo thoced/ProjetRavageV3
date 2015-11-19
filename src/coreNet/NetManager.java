@@ -214,6 +214,13 @@ public class NetManager implements IBaseRavage
 						break;
 						
 						
+			case PROJECTIL:
+						NetDataProjectil updateProjectil = (NetDataProjectil)data;
+						this.callBackUpdateProjectil(updateProjectil);
+						break;
+				
+						
+						
 				
 										   	
 			default: break;
@@ -249,6 +256,14 @@ public class NetManager implements IBaseRavage
 		for(INetManagerCallBack i : listCallBack)
 		{
 			i.onUpdateUnity(unity);
+		}
+	}
+	
+	private void callBackUpdateProjectil(NetDataProjectil unity)
+	{
+		for(INetManagerCallBack i : listCallBack)
+		{
+			i.onUpdateProjectil(unity);
 		}
 	}
 	

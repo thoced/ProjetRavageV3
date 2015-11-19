@@ -63,6 +63,7 @@ import coreMessageManager.MessageManager;
 import coreMessageManager.RegistrationObject;
 import coreNet.NetManager;
 import corePhysic.PhysicWorldManager;
+import coreProjectil.ProjectilManager;
 import coreSounds.SoundsManager;
 
 
@@ -87,6 +88,7 @@ public class FrameWork
 	private FogManager fogManager;
 	private ForegroundEffectManager foregroundEffectManager;
 	private SoundsManager soundsManager;
+	private ProjectilManager projectilManager;
 	// Clocks
 	private Clock frameClock;
 	// fps
@@ -172,6 +174,8 @@ public class FrameWork
 		foregroundEffectManager.init();
 		soundsManager = new SoundsManager();
 		soundsManager.init();
+		projectilManager = new ProjectilManager();
+		projectilManager.init();
 	
 		// création des guis tests
 		PanelInfoGold infoGold = new PanelInfoGold(0.5f,(1f / window.getSize().y) * 24f,new Vector2f(256f,48f));
@@ -265,6 +269,7 @@ public class FrameWork
 			bloodManager.update(deltaTime);
 			guiManager.update(deltaTime);
 			messageManager.update(deltaTime);
+			projectilManager.update(deltaTime);
 			
 			
 			// Draw des composants
@@ -274,6 +279,8 @@ public class FrameWork
 			currentLevel.getView().drawBackground(renderTexture, null); // affichage du background du level
 			// Draw des unity
 			drawaUnityManager.draw(renderTexture, null);
+			// Draw des projectils
+			projectilManager.draw(renderTexture, null);
 			// Draw du shadow 
 			currentLevel.getView().drawShadowground(renderTexture, null);
 			

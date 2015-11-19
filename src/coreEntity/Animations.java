@@ -12,6 +12,13 @@ public class Animations implements Serializable
 		return animations;
 	}
 	
+	public int lenght()
+	{
+		if(animations != null)
+			return animations.length;
+		else
+			return 0;
+	}
 	
 	public void makeAnimation(int totalFrame)
 	{

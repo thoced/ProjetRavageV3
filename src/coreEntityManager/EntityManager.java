@@ -42,6 +42,7 @@ import coreAI.AstarManager;
 import coreAI.Node;
 import coreDrawable.FogManager.IFogVector;
 import coreEntity.ArcherController;
+import coreEntity.ArrowArcher;
 import coreEntity.DuellisteController;
 import coreEntity.HacheurController;
 import coreEntity.KnighController;
@@ -67,6 +68,7 @@ import coreMessageManager.MessageRavage;
 import coreMessageManager.RegistrationObject;
 import coreNet.INetManagerCallBack;
 import coreNet.NetBase.TYPE;
+import coreNet.NetDataProjectil;
 import coreNet.NetDataUnity;
 import coreNet.NetDeleteSynchronised;
 import coreNet.NetHeader;
@@ -666,13 +668,15 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 			if(region.contains(new Vector2f(unity.getModel().getBody().getPosition().x * PhysicWorldManager.getRatioPixelMeter(),
 					unity.getModel().getPosition().y * PhysicWorldManager.getRatioPixelMeter())))
 					{
-						unity.getModel().setSelected(true);
-						this.listUnitySelected.add(unity);
-						
-						// on sort de la sélection si on dépasse 32
-						if(this.listUnitySelected.size() > 31)
-							break;
-						
+						if(unity.getClass() != ArrowArcher.class) // on ne sélectionne pas une fleche
+						{
+							unity.getModel().setSelected(true);
+							this.listUnitySelected.add(unity);
+							
+							// on sort de la sélection si on dépasse 32
+							if(this.listUnitySelected.size() > 31)
+								break;
+						}
 					}
 		}
 		
@@ -1122,6 +1126,28 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 	}
 	
 	@Override
+	public void onUpdateProjectil(NetDataProjectil projectil) 
+	{
+		// récupération du projectil en temps que unité
+		UnityNetController proj = this.vectorUnityNet.get(projectil.getIdProjectil());
+		if(proj != null)
+		{
+			// récupération de l'unité touché
+			UnityBaseController unity = this.vectorUnity.get(projectil.getIdUnityTouch());
+			// récupération des domages
+			int damage = projectil.getDamage();
+			// diminuation des domage de l'unité frappé
+			unity.hit(15, 3, 2, false);  // exemple pour l'arché
+			// le projectile doit mourir ensuite
+			
+			this.vectorUnityNet.remove(proj.getModel().getId());
+		}
+		
+		
+		
+	}
+	
+	@Override
 	public void onSynchronised(NetDeleteSynchronised sync)
 	{
 		// réception de la liste des id de synchronisation de suppression
@@ -1264,6 +1290,8 @@ public class EntityManager implements IBaseRavage,IEventCallBack,IRegionSelected
 		// TODO Auto-generated method stub
 		return this.vectorUnity.values();
 	}
+
+	
 
 
 	

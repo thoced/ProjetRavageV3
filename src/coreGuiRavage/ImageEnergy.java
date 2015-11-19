@@ -25,6 +25,7 @@ public class ImageEnergy extends Image
 	
 	public ImageEnergy(UnityBaseController unity,Vector2f position,Texture texture,Panel container) 
 	{
+		
 		super((Texture)unity.getView().getSprite().getTexture(),unity.getModel().getAnimations().getInd(0), position);
 		// parent container
 		m_container = container;

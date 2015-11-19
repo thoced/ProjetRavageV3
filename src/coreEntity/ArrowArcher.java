@@ -21,8 +21,10 @@ import org.jsfml.system.Time;
 
 
 
+
 import coreEntityManager.EntityManager;
 import coreNet.NetBase;
+import coreNet.NetDataProjectil;
 import coreNet.NetDataUnity;
 import coreNet.NetSendThread;
 import corePhysic.PhysicWorldManager;
@@ -156,6 +158,7 @@ public class ArrowArcher extends UnityBaseController
 	@Override
 	public void update(Time deltaTime) 
 	{
+		// si l'elaspedTimeToDie est supérieur à le temps de vie, on tue le projectil
 		elapsedTimeToDie += deltaTime.asSeconds();
 		if(elapsedTimeToDie > timeToDie)
 		{
@@ -164,26 +167,20 @@ public class ArrowArcher extends UnityBaseController
 		}
 		else
 		{	
-			
+			// si le chemin parcouru est supérieur à la distance entre l'enemy et le tireur, on touche la cible
 			if(this.getModel().getPosition().sub(this.startArrow).length() > this.diffStartToTarget)
 			{
 				// on toucne la cible
 
-				NetDataUnity data = new NetDataUnity();			// creatin du netdataunity
-				data.setTypeMessage(NetBase.TYPE.UPDATE);		// on spécifie que c'est une update
-				this.getModel().setKnocking(true);				// on spécifie au modèle que nous sommes en train de frapper
-				this.getModel().setStreightStrike(10);			// on spécifie la force de frappe
-				this.getModel().setIdEnemy(this.getEnemy().getModel().getId());
+				NetDataProjectil projectil = new NetDataProjectil();			// creatin du netdataunity
+				projectil.setTypeMessage(NetBase.TYPE.PROJECTIL);		// on spécifie que c'est une update
+				projectil.setIdProjectil(this.getModel().getId());
+				projectil.setIdUnityTouch(this.getEnemy().getModel().getId());
+				projectil.setDamage(15);
 				this.prepareModelToNet();						// préparation du model pour l'envoi sur le réseau
 				
-				try
-				{
-					data.setModel(this.getModel().clone());
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}					// placement du model dans le netdataunity
-				NetSendThread.push(data);						// envoi sur le réseau
+				
+				NetSendThread.push(projectil);						// envoi sur le réseau
 				
 			}
 			
@@ -224,7 +221,9 @@ public class ArrowArcher extends UnityBaseController
 		super();
 		// instance du controller et de la vue
 		model = new ArrowArcherModel(this);
+		this.setModel(model);
 		view = new ArrowArcherView(model, this);
+		this.setView(view);
 	
 	
 	}

@@ -8,6 +8,8 @@ public interface INetManagerCallBack
 	
 	public void onUpdateUnity(NetDataUnity unity);
 	
+	public void onUpdateProjectil(NetDataProjectil unity);
+	
 	public void onSynchronised(NetDeleteSynchronised sync);
 	
 	/*public void onMoveUnity(NetMoveUnity unity);

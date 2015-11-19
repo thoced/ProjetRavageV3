@@ -38,6 +38,8 @@ import coreNet.NetHeader.TYPE;
 import coreNet.NetManager;
 import coreNet.NetStrike;
 import corePhysic.PhysicWorldManager;
+import coreProjectil.Arrow;
+import coreProjectil.ProjectilManager;
 import coreSounds.SoundsManager;
 import coreSounds.SoundsManager.TYPE_SOUNDS;
 
@@ -121,23 +123,9 @@ public class ArcherController extends UnityBaseController
 				{
 					this.m_dirEnemy = m_enemy.getModel().getPosition().sub(this.getModel().getPosition());
 					
+					Arrow arrow = new Arrow(EntityManager.getNewIdUnity(),this.getModel().getPosition(),this.m_dirEnemy,10f,2f,this.m_dirEnemy.length(),this.getModel().getIdEnemy());
+					ProjectilManager.getProjectils().put(arrow.getController().getId(), arrow);
 					
-					// attaque à distanc,tir de l'archer
-					ArrowArcher arrow = new ArrowArcher();
-					arrow.getModel().setPosition(this.getModel().getPosition());
-					arrow.getModel().setSpeed(24f);
-					arrow.getModel().setId(EntityManager.getNewIdUnity());
-					arrow.getModel().setMyCamp(EntityManager.getCampSelected());
-					arrow.getModel().setIdType(TYPEUNITY.ARCHER);
-					arrow.getModel().setPlayer(true); // c'est un model controllé par le joueur
-					arrow.getModel().initModel(arrow);
-					arrow.setDirArrow(this.m_dirEnemy);
-					arrow.setTimeToDie(1f);
-					arrow.setDiffStartToTarget(this.m_dirEnemy.length());
-					arrow.setEnemy(m_enemy);
-					arrow.init();
-					
-					EntityManager.getVectorUnity().put(arrow.getModel().getId(), arrow);
 					
 					// attaque à distance, tir
 					if(this.m_dirEnemy.length() < 15f)

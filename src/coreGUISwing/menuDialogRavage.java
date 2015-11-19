@@ -23,6 +23,7 @@ import coreEntityManager.EntityManager;
 import coreEntityManager.EntityManager.CAMP;
 import coreNet.INetManagerCallBack;
 import coreNet.NetBase.TYPE;
+import coreNet.NetDataProjectil;
 import coreNet.NetDataUnity;
 import coreNet.NetDeleteSynchronised;
 import coreNet.NetHello;
@@ -334,6 +335,12 @@ public class menuDialogRavage extends JDialog implements ActionListener, INetMan
 
 	@Override
 	public void onSynchronised(NetDeleteSynchronised sync) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUpdateProjectil(NetDataProjectil unity) {
 		// TODO Auto-generated method stub
 		
 	}
